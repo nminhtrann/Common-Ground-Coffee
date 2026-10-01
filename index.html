@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Common Ground · Coffee Brewing Companion</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
+<svg class="mi-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<symbol id="mi-espresso" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" style="stroke-width:var(--mi-w,1.5)" stroke-linecap="round" stroke-linejoin="round"><path d="M5.6 2.2h2.8a1.2 1.2 0 0 1 1.2 1.3L9.2 6.6H4.8l-.4-3.1a1.2 1.2 0 0 1 1.2-1.3z"/><path d="M5.8 6.6v1.2h2.4V6.6"/><rect x="3.2" y="7.8" width="7.6" height="1.6" rx=".5"/><path d="M2.5 11.6h9.6v1.2l-1.1 3H3.6l-1.1-3z"/><path d="M12.1 12.3h8.6a1.1 1.1 0 0 1 0 2.2h-8.6"/><path d="M6.4 15.8v1.3M8.2 15.8v1.3"/><path d="M7.3 19.2c-.6.9-.9 1.5-.9 1.9a.9.9 0 0 0 1.8 0c0-.4-.3-1-.9-1.9z"/></g></symbol>
+<symbol id="mi-liveart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" style="stroke-width:var(--mi-w,1.5)" stroke-linecap="round" stroke-linejoin="round"><path transform="translate(.4 .5) rotate(38 7 6) scale(.9)" d="M3.4 2.4h6.8l1.7-.9-.7 2.4.8 7a1.5 1.5 0 0 1-1.5 1.7H4.3a1.5 1.5 0 0 1-1.5-1.7z"/><path d="M13.6 6.4c1 1.6 1.4 3.8 1.2 7"/><path d="M8 14.4h11.5v1.6a4.9 4.9 0 0 1-4.9 4.9h-1.7A4.9 4.9 0 0 1 8 16z"/><path d="M19.5 15.3h.5a1.8 1.8 0 0 1 0 3.6h-1.1"/></g></symbol>
+<symbol id="mi-pourover" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" style="stroke-width:var(--mi-w,1.5)" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3.5h18l-6.2 8H9.2z"/><path d="M8.6 11.5h6.8v1.6H8.6z"/><path d="M12 14.6c-.5.7-.7 1.1-.7 1.4a.7.7 0 0 0 1.4 0c0-.3-.2-.7-.7-1.4z"/><path d="M6.5 17.6h11l-.9 3.9H7.4z"/></g></symbol>
+<symbol id="mi-aeropress" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" style="stroke-width:var(--mi-w,1.5)" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 2.2h11"/><path d="M8.2 2.2v4.6h7.6V2.2"/><path d="M5 7h14"/><rect x="6.3" y="7" width="11.4" height="10.2" rx=".8"/><path d="M9 10.3h3M9 12.6h2"/><path d="M5.6 17.2h12.8"/><path d="M7.5 19.4h9v1.3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1z"/></g></symbol>
+<symbol id="mi-immersion" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" style="stroke-width:var(--mi-w,1.5)" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.5" cy="2.6" r="1.2"/><path d="M11.5 3.8v6.6"/><path d="M5.8 6h11.4"/><rect x="6.3" y="6" width="10.4" height="15.2" rx="1.4"/><path d="M8 10.4h7"/><path d="M16.7 9h1.2a1.8 1.8 0 0 1 1.8 1.8v4.6a1.8 1.8 0 0 1-1.8 1.8h-1.2"/></g></symbol>
+<symbol id="mi-chemex" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" style="stroke-width:var(--mi-w,1.5)" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 2.5h15l-5.3 7.8"/><path d="M4.5 2.5l5.3 7.8"/><rect x="9.3" y="10.3" width="5.4" height="2.6" rx=".6"/><path d="M14.7 11.6h1.8"/><path d="M9.8 12.9 4.3 20.6a.8.8 0 0 0 .7 1.2h14a.8.8 0 0 0 .7-1.2l-5.5-7.7"/></g></symbol>
+<symbol id="mi-mokapot" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" style="stroke-width:var(--mi-w,1.5)" stroke-linecap="round" stroke-linejoin="round"><path d="M11.8 1.8v1"/><path d="M7.8 2.8h8l1.8 8.6H6z"/><path d="M15.8 3.4l2.6-1"/><path d="M6.8 11.4h10v1.8h-10z"/><path d="M6 13.2h11.6l-1.5 8.2H7.5z"/><path d="M7.3 5.2H4.4a.9.9 0 0 0-.9.9v4.4a.9.9 0 0 0 .9.9h1.7"/></g></symbol>
+</svg>
+
+<div class="page" id="page">
+  <div class="phone" id="phoneEl">
+    <div class="phone-island"></div>
+    <div class="phone-status-bar" id="statusBar">
+      <div class="status-time">9:41</div>
+      <div class="status-icons">
+        <svg width="19" height="12" viewBox="0 0 19 12">
+          <rect x="0" y="7.5" width="3.2" height="4.5" rx="0.7" />
+          <rect x="4.8" y="5" width="3.2" height="7" rx="0.7" />
+          <rect x="9.6" y="2.5" width="3.2" height="9.5" rx="0.7" />
+          <rect x="14.4" y="0" width="3.2" height="12" rx="0.7" />
+        </svg>
+        <svg width="17" height="12" viewBox="0 0 17 12">
+          <path d="M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z" />
+          <path d="M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z" />
+          <circle cx="8.5" cy="10.5" r="1.5" />
+        </svg>
+        <svg width="27" height="13" viewBox="0 0 27 13">
+          <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-opacity="0.35" />
+          <rect x="2" y="2" width="20" height="9" rx="2" />
+          <path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z" opacity="0.4" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="app">
+
+      <section class="screen active" data-screen="home">
+        <div class="hm">
+          <div class="hm-head">
+            <div class="avatar">AR</div>
+            <div class="profile-text">
+              <div class="hm-greet" id="hmGreet">Hi, Alex</div>
+              <div class="hm-sub" id="hmSub"></div>
+            </div>
+            <button type="button" class="icon-btn" id="arDeviceBtn" aria-label="AR glasses view"><i class="fa-solid fa-glasses icon-fa ic-ink ic-15"></i></button>
+            <button type="button" class="icon-btn" id="settingsBtn" aria-label="Settings"><i class="fa-solid fa-sliders icon-fa ic-ink ic-15"></i></button>
+          </div>
+
+          <div class="hm-features">
+            <button type="button" class="hm-ft ft-esp" data-feature="espresso">
+              <span class="ft-badge"><b>AR</b>Live X-Ray</span>
+              <i class="mi hm-ft-ic"><svg><use href="#mi-espresso"/></svg></i>
+              <strong>Espresso</strong>
+              <span class="hm-ft-sub">See pressure, flow and channels inside the machine</span>
+              <span class="hm-ft-go">Brew espresso <i class="fa-solid fa-arrow-right"></i></span>
+            </button>
+            <button type="button" class="hm-ft ft-art" data-feature="liveart">
+              <span class="ft-badge"><b>AR</b>Pour coach</span>
+              <i class="mi hm-ft-ic"><svg><use href="#mi-liveart"/></svg></i>
+              <strong>LiveARt</strong>
+              <span class="hm-ft-sub">Follow the pour route drawn into your cup</span>
+              <span class="hm-ft-go">Practise a pour <i class="fa-solid fa-arrow-right"></i></span>
+            </button>
+          </div>
+
+          <div class="hm-hero lg" id="hmHero"></div>
+
+          <div class="section-row"><h4>Brew now</h4><button type="button" class="sec-link lg" data-nav="method" aria-label="All methods"><i class="fa-solid fa-chevron-right"></i></button></div>
+          <div class="hm-chips" id="hmQuick"></div>
+
+          <div class="hm-grid">
+            <button type="button" class="hm-tile lg" id="hmDial"></button>
+            <button type="button" class="hm-tile lg" id="hmBean"></button>
+          </div>
+
+          <div class="section-row"><h4>Recent brews</h4><button type="button" class="sec-link lg" data-nav="history" aria-label="All brews"><i class="fa-solid fa-chevron-right"></i></button></div>
+          <div class="hscroll" id="historyList"></div>
+
+          <div class="section-row"><h4>From the community</h4><button type="button" class="sec-link lg" data-nav="feed" aria-label="Open feed"><i class="fa-solid fa-chevron-right"></i></button></div>
+          <div class="hm-feed" id="hmFeed"></div>
+
+        </div>
+      </section>
+
+      <section class="screen" data-screen="method">
+        <header class="header">
+          <button class="back-circle" data-nav="home"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+          <div class="header-title">Choose method</div>
+        </header>
+        <div class="header-dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+
+        <div class="method-grid">
+          <div class="method-card ft-esp feature" data-method="espresso">
+            <span class="ft-badge"><b>AR</b>Live X-Ray</span>
+            <i class="mi ic-30"><svg><use href="#mi-espresso"/></svg></i>
+            <div class="method-name">Espresso</div>
+            <div class="method-sub">Pressure, flow and channels shown live on Plate 01</div>
+          </div>
+          <div class="method-card" data-method="pourover">
+            <i class="mi ic-ink ic-30"><svg><use href="#mi-pourover"/></svg></i>
+            <div class="method-name">V60</div>
+          </div>
+          <div class="method-card" data-method="aeropress">
+            <i class="mi ic-ink ic-30"><svg><use href="#mi-aeropress"/></svg></i>
+            <div class="method-name">AeroPress</div>
+          </div>
+          <div class="method-card" data-method="immersion">
+            <i class="mi ic-ink ic-30"><svg><use href="#mi-immersion"/></svg></i>
+            <div class="method-name">French Press</div>
+          </div>
+          <div class="method-card" data-method="chemex">
+            <i class="mi ic-ink ic-30"><svg><use href="#mi-chemex"/></svg></i>
+            <div class="method-name">Chemex</div>
+          </div>
+        </div>
+
+        <div class="more-methods-toggle" id="moreMethodsToggle">
+          <span id="moreMethodsLabel">More methods</span>
+          <i class="fa-solid fa-chevron-down icon-fa ic-teal-dark ic-12"></i>
+        </div>
+        <div class="method-grid more-methods-grid" id="moreMethodsGrid">
+          <div class="method-card" data-method="mokapot">
+            <i class="mi ic-ink ic-30"><svg><use href="#mi-mokapot"/></svg></i>
+            <div class="method-name">Moka Pot</div>
+          </div>
+        </div>
+
+        <div class="import-row" data-method="import">
+          <i class="fa-solid fa-file-import icon-fa ic-ink ic-20"></i>
+          <div>
+            <div class="import-title">Import a recipe</div>
+            <div class="import-desc">Bring in a saved or shared method</div>
+          </div>
+        </div>
+
+        <button class="btn-primary block" id="methodContinueBtn" disabled>Continue</button>
+      </section>
+
+      <section class="screen" data-screen="grind">
+        <header class="header">
+          <button class="back-circle" data-nav="method"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+          <div class="header-title">Grind &amp; dose</div>
+        </header>
+        <div class="header-dots"><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="rv-toast" id="applyToast"></div>
+
+        <div class="grind-card">
+          <div class="grind-title" id="grindMethodName"></div>
+          <div class="grind-summary" id="grindSummary"></div>
+        </div>
+        <div class="tip-row" id="grindTipRow">
+          <i class="fa-solid fa-clock icon-fa ic-teal-dark ic-26"></i>
+          <div id="grindTip"></div>
+        </div>
+
+        <div class="pp-card" id="ppGrindCard">
+          <div class="pp-head"><div class="pp-title">Grind</div><div class="pp-val" id="ppGrindVal"></div></div>
+          <div class="pp-vis">
+            <svg class="pp-svg pp-grind" viewBox="0 0 320 150" aria-hidden="true">
+              <rect width="320" height="150" fill="#FBF8F2"/>
+              <g class="pp-water" id="ppGrindWater"></g>
+              <g id="ppGrains"></g>
+              <g transform="translate(248 124)">
+                <rect x="-6" y="-14" width="68" height="24" rx="6" fill="#FBF8F2" opacity=".92"/>
+                <path d="M0 0 H50 M0 -4 V4 M50 -4 V4" stroke="#2B1B12" stroke-width="1.6" fill="none"/>
+                <text x="25" y="-5" text-anchor="middle" class="pp-svg-lab">1 mm</text>
+              </g>
+            </svg>
+            <div class="pp-tag" id="ppGrindLike"></div>
+          </div>
+          <div class="pp-dial" id="dialTicks"></div>
+          <div class="pp-bands" id="ppBands"></div>
+          <div class="pp-note" id="ppGrindNote"></div>
+        </div>
+
+        <div class="px hidden" id="prepCard">
+          <div class="px-hero" id="pxHero">
+            <svg class="px-svg" id="pxSvg" viewBox="0 0 340 232" data-step="grind" aria-hidden="true">
+              <defs>
+                <clipPath id="pxBasketClip"><path d="M32,44 L47,166 H193 L208,44 Z"/></clipPath>
+                <clipPath id="pxLoupeClip"><circle cx="276" cy="98" r="54"/></clipPath>
+                <clipPath id="pxTopClip"><circle cx="276" cy="98" r="48"/></clipPath>
+                <pattern id="pxGrains" width="30" height="30" patternUnits="userSpaceOnUse"></pattern>
+              </defs>
+              <g id="pxCam">
+                <g class="px-head">
+                  <rect x="16" y="12" width="208" height="24" rx="5" fill="#3B2A1E"/>
+                  <text x="120" y="28" text-anchor="middle" class="pp-svg-lab light">Group head</text>
+                  <path d="M22,40 H218" stroke="#3B2A1E" stroke-width="2.4" stroke-dasharray="2 3"/>
+                </g>
+                <g clip-path="url(#pxBasketClip)">
+                  <rect x="20" y="40" width="200" height="130" fill="#F2EBDD"/>
+                  <path id="pxBed" d="" fill="url(#pxGrains)"/>
+                  <rect id="pxHit" x="20" y="40" width="200" height="0" fill="#C0523E" opacity=".3"/>
+                  <g id="pxClumps" class="px-fade"></g>
+                  <g id="pxCracks" class="px-fade" stroke="#F2EBDD" stroke-width="1.6" stroke-linecap="round"></g>
+                  <g class="px-water" id="pxWater"></g>
+                </g>
+                <path d="M30,44 L45,168 H195 L210,44" fill="none" stroke="#2B1B12" stroke-width="2.4" stroke-linejoin="round"/>
+                <path d="M52,172 H188" stroke="#2B1B12" stroke-width="1.4" stroke-dasharray="1.5 3"/>
+                <g class="px-water px-drips" id="pxDrips"></g>
+                <g class="px-only" data-for="dose">
+                  <line id="pxSwell" x1="36" x2="204" y1="80" y2="80" stroke="#C08552" stroke-width="1.6" stroke-dasharray="5 4"/>
+                  <text id="pxSwellTxt" x="44" y="76" class="pp-svg-lab car">Wet puck swells</text>
+                  <path id="pxDim" d="" stroke="#12664D" stroke-width="1.6" fill="none"/>
+                </g>
+                <g id="pxTamper" class="px-only" data-for="tamp">
+                  <rect x="104" y="-6" width="32" height="30" rx="12" fill="#C08552"/>
+                  <rect x="114" y="22" width="12" height="12" fill="#8C6242"/>
+                  <rect x="42" y="34" width="156" height="10" rx="2" fill="#6E747A"/>
+                </g>
+              </g>
+              <g class="px-only" data-for="grind" id="pxLoupe">
+                <circle cx="276" cy="98" r="54" fill="#FBF8F2"/>
+                <g clip-path="url(#pxLoupeClip)">
+                  <g class="px-water" id="pxLoupeWater"></g>
+                  <g id="pxLoupeGrains"></g>
+                </g>
+                <circle cx="276" cy="98" r="54" fill="none" stroke="#2B1B12" stroke-width="2.4"/>
+                <path d="M251,172 H301 M251,168 V176 M301,168 V176" stroke="#2B1B12" stroke-width="1.6"/>
+                <text x="276" y="190" text-anchor="middle" class="pp-svg-lab">1 mm · real scale</text>
+                <text id="pxLike" x="276" y="208" text-anchor="middle" class="pp-svg-lab car"></text>
+              </g>
+              <g class="px-only" data-for="dose" id="pxHead">
+                <text x="232" y="80" class="pp-svg-lab muted">Headspace</text>
+                <text id="pxHeadNum" x="232" y="104" class="px-big"></text>
+                <text x="232" y="124" class="pp-svg-lab muted">room for the puck</text>
+                <text x="232" y="136" class="pp-svg-lab muted">to swell when wet</text>
+              </g>
+              <g class="px-only" data-for="wdt" id="pxTop">
+                <circle cx="276" cy="98" r="53" fill="none" stroke="#2B1B12" stroke-width="2.2"/>
+                <g clip-path="url(#pxTopClip)">
+                  <circle cx="276" cy="98" r="48" fill="#6B4A30"/>
+                  <g id="pxTopEven" class="px-fade"></g>
+                  <g id="pxTopClumps" class="px-fade"></g>
+                  <path id="pxSpiral" d="" fill="none" stroke="#F4ECDD" stroke-width="1.1" stroke-linecap="round"/>
+                </g>
+                <text x="276" y="172" text-anchor="middle" class="pp-svg-lab">Top view</text>
+              </g>
+              <g class="px-only" data-for="tamp" transform="translate(284 44)">
+                <rect x="0" y="0" width="12" height="118" rx="6" fill="#E6DDCD"/>
+                <rect x="0" y="50" width="12" height="34" fill="#1D9E75" opacity=".28"/>
+                <rect id="pxGauge" x="0" y="118" width="12" height="0" rx="6" fill="#2B1B12"/>
+                <text id="pxGaugeTxt" x="-8" y="140" text-anchor="middle" class="pp-svg-lab"></text>
+                <text x="-8" y="152" text-anchor="middle" class="pp-svg-lab muted">force</text>
+              </g>
+              <text id="pxCaption" x="120" y="226" text-anchor="middle" class="pp-svg-lab muted">Side view of the basket</text>
+            </svg>
+          </div>
+
+          <div class="px-tabs" id="pxTabs">
+            <span class="px-pill" id="pxPill"></span>
+            <button type="button" data-step="grind"><i></i>Grind</button>
+            <button type="button" data-step="dose"><i></i>Dose</button>
+            <button type="button" data-step="wdt"><i></i>WDT</button>
+            <button type="button" data-step="tamp"><i></i>Tamp</button>
+          </div>
+
+          <div class="px-panel" id="pxPanel">
+            <div class="px-step" data-panel="grind">
+              <div class="px-row"><span class="px-k">Grind size</span><span class="px-v" id="pxGrindVal"></span></div>
+              <div class="pp-dial" id="pxDial"></div>
+              <div class="pp-bands" id="pxBands"></div>
+            </div>
+            <div class="px-step" data-panel="dose">
+              <div class="px-row">
+                <div class="pp-step">
+                  <button type="button" data-dose="-0.5" aria-label="Less coffee">&minus;</button>
+                  <span id="pxDoseNum">18.0 g</span>
+                  <button type="button" data-dose="0.5" aria-label="More coffee">+</button>
+                </div>
+                <div class="pp-ratio" id="pxRatio"></div>
+              </div>
+            </div>
+            <div class="px-step" data-panel="wdt">
+              <div class="seg3" id="pxWdtSeg">
+                <button type="button" data-wdt="0">Skip</button>
+                <button type="button" data-wdt="1">Stir with needles</button>
+              </div>
+            </div>
+            <div class="px-step" data-panel="tamp">
+              <div class="px-row"><span class="px-k">Pressure</span>
+                <div class="seg3" id="tampSeg">
+                  <button type="button" data-val="light">Light</button>
+                  <button type="button" data-val="ideal">Ideal</button>
+                  <button type="button" data-val="tight">Firm</button>
+                </div>
+              </div>
+              <div class="px-row"><span class="px-k">Surface</span>
+                <div class="seg3" id="pxLevelSeg">
+                  <button type="button" data-level="level">Level</button>
+                  <button type="button" data-level="tilted">Tilted</button>
+                </div>
+              </div>
+            </div>
+            <div class="px-result">
+              <div class="pp-note" id="pxNote"></div>
+              <button type="button" class="px-why" id="pxWhyBtn">Why?</button>
+            </div>
+            <div class="px-whybody" id="pxWhy"><div id="pxWhyText"></div></div>
+            <button type="button" class="px-next" id="pxNext"></button>
+          </div>
+
+          <div class="px-bar">
+            <div class="px-fc">
+              <div class="px-fc-top">
+                <span class="px-time" id="pxFcTime"></span>
+                <span class="px-chip" id="pxFcRisk"></span>
+                <span class="px-taste" id="pxFcTaste"></span>
+              </div>
+              <svg class="px-chart" viewBox="0 0 300 44" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="125" y="0" width="35" height="44" fill="rgba(29,158,117,.16)"/>
+                <path id="pxChartP" class="px-cp" d=""/>
+                <path id="pxChartQ" class="px-cq" d=""/>
+                <line id="pxChartEnd" class="px-ce" x1="0" x2="0" y1="0" y2="44"/>
+              </svg>
+              <div class="px-legend"><span><i class="q"></i>Flow</span><span><i class="p"></i>Pressure</span><span class="z">25–32 s target</span><span>60 s</span></div>
+              <div class="px-tiprow"><div class="px-tip" id="pxFcTip"></div><button type="button" class="px-src" id="pxSrc">Demo data</button></div>
+            </div>
+            <button class="btn-primary" id="pxStart">Start brewing</button>
+          </div>
+        </div>
+
+        <button class="btn-primary block" id="startBrewingBtn">Start brewing</button>
+      </section>
+
+      <section class="screen" data-screen="brew">
+        <div class="camera-screen" id="brewStage">
+          <div class="camera-layer">
+            <video id="brewVideo" class="camera-video hidden" autoplay playsinline muted></video>
+            <div id="brewFallback" class="camera-fallback">Live camera unavailable. Point the phone at your brew setup.</div>
+          </div>
+          <div class="scrim"></div>
+          <div class="corner-brackets"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div>
+
+          <div class="camera-topbar">
+            <button class="back-circle glass" data-nav="grind" data-stop-brew="1"><i class="fa-solid fa-chevron-left icon-fa ic-cream ic-14"></i></button>
+            <div class="camera-title">Live Brew</div>
+            <button class="back-circle glass" id="glassesBtn" aria-label="Glasses view"><i class="fa-solid fa-glasses icon-fa ic-cream ic-14"></i></button>
+            <button class="rec-btn glass" id="recToggleBtn">
+              <span class="rec-dot" id="recDot"></span>
+              <span id="recLabel">REC</span>
+            </button>
+          </div>
+
+          <div class="phase-pill-wrap">
+            <div class="phase-pill">
+              <span class="phase-dot"></span>
+              <span id="brewMethodName" class="hidden-name"></span>
+              <span id="brewPhasePillName">Pre-infusion</span>
+              <span id="brewPhasePillTime">· 0:08</span>
+            </div>
+          </div>
+
+          <div class="eo-root" id="espressoOverlay"></div>
+
+          <div class="hub-cards">
+            <div class="hub-card hub-tl" id="brewHub0">
+              <i class="fa-solid fa-circle-check icon-fa ic-teal ic-15"></i>
+              <div><div class="hub-label">Grind size</div><div class="hub-value">Dialed in ✓</div></div>
+            </div>
+            <div class="hub-card hub-tr" id="brewHub0b">
+              <i class="fa-solid fa-clock icon-fa ic-cream ic-15"></i>
+              <div><div class="hub-label" id="brewHubTimerLabel">Bloom timer</div><div class="hub-value" id="brewHubTimerValue">0:08</div></div>
+            </div>
+            <div class="hub-card hub-tl-2" id="brewHub1">
+              <i class="fa-solid fa-water icon-fa ic-teal ic-15"></i>
+              <div><div class="hub-label">Flow rate</div><div class="hub-value">Steady</div></div>
+            </div>
+            <div class="hub-card hub-br" id="brewHub1b">
+              <i class="fa-solid fa-bullseye icon-fa ic-teal ic-15"></i>
+              <div><div class="hub-label">Extraction</div><div class="hub-value">On target</div></div>
+            </div>
+            <div class="hub-card hub-tr-2" id="brewHub2">
+              <i class="fa-solid fa-droplet icon-fa ic-teal ic-15"></i>
+              <div><div class="hub-label" id="brewHub2Label">Finish</div><div class="hub-value">Steady</div></div>
+            </div>
+            <div class="hub-card hub-bl" id="brewHub2b">
+              <i class="fa-solid fa-flag icon-fa ic-cream ic-15"></i>
+              <div><div class="hub-label">Status</div><div class="hub-value">Almost done</div></div>
+            </div>
+          </div>
+
+          <div class="camera-controls">
+            <button class="control-circle big" id="brewPlayPauseBtn"><span id="brewPlayPauseIcon"></span></button>
+            <button class="control-circle glass" id="brewFinishBtn">
+              <i class="fa-solid fa-xmark icon-fa ic-cream ic-17"></i>
+            </button>
+          </div>
+
+          <div class="progress-bottom">
+            <div class="progress-segments">
+              <div class="segment" id="brewSegment0"></div>
+              <div class="segment" id="brewSegment1"></div>
+              <div class="segment" id="brewSegment2"></div>
+            </div>
+            <div class="progress-labels">
+              <span id="brewLabel0"></span><span id="brewLabel1"></span><span id="brewLabel2"></span>
+            </div>
+          </div>
+
+          <div class="gl" id="glHud">
+            <div class="gl-bar">
+              <button type="button" class="gl-icon" id="glBackBtn" aria-label="Back to puck prep"><i class="fa-solid fa-chevron-left icon-fa"></i></button>
+              <button type="button" class="gl-icon" id="glExitBtn" aria-label="Back to phone view"><i class="fa-solid fa-mobile-screen-button icon-fa"></i></button>
+              <span class="gl-title">Espresso</span>
+              <span class="gl-src" data-gl="src"></span>
+              <button type="button" class="gl-icon" id="glPlayBtn" aria-label="Start or pause the shot"><i class="fa-solid fa-play icon-fa"></i></button>
+              <button type="button" class="gl-icon" id="glEndBtn" aria-label="End the shot"><i class="fa-solid fa-flag-checkered icon-fa"></i></button>
+              <button type="button" class="gl-icon" id="glRecBtn" aria-label="Record video"><i class="fa-solid fa-circle icon-fa"></i></button>
+              <button type="button" class="gl-btn" id="glViewBtn">Camera X-Ray</button>
+            </div>
+            <div class="gl-main">
+              <svg class="gl-vis" viewBox="0 0 100 160" aria-hidden="true">
+                <defs><clipPath id="glCupClip"><path d="M31 111 L69 111 L65.5 149 L34.5 149 Z"/></clipPath></defs>
+                <rect class="gl-line" x="20" y="8" width="60" height="18" rx="3"/>
+                <line class="gl-faint" x1="26" y1="30" x2="74" y2="30"/>
+                <path class="gl-puck" id="glPuck" d="M28 39 L72 39 L69.5 50 L30.5 50 Z"/>
+                <path class="gl-line" d="M24 34 L76 34 L70 52 L30 52 Z"/>
+                <line class="gl-line" x1="76" y1="40" x2="97" y2="46"/>
+                <path class="gl-line" d="M45 52 L45 58 L55 58 L55 52"/>
+                <line class="gl-stream" id="glStream" x1="50" y1="59" x2="50" y2="146"/>
+                <rect class="gl-cup" id="glCup" x="30" y="150" width="40" height="0" clip-path="url(#glCupClip)"/>
+                <path class="gl-line" d="M30 110 L70 110 L66 150 L34 150 Z"/>
+                <path class="gl-line" d="M70 118 Q80 120 78 130 Q76 138 67.5 138"/>
+              </svg>
+              <div class="gl-nums">
+                <div class="gl-phase" data-gl="phase"></div>
+                <div class="gl-row">
+                  <div class="gl-big"><span class="gl-w" id="glWeight" data-gl="weight">0.0</span><small data-gl="target">/ 36 g</small></div>
+                  <div class="gl-time"><span data-gl="time">0</span><small>s</small></div>
+                </div>
+              </div>
+              <div class="gl-flow">
+                <div class="gl-track"><div class="gl-zone"></div><div class="gl-mark" id="glMark"></div></div>
+                <div class="gl-flowv"><span data-gl="flow">0.0</span><small> g/s</small></div>
+              </div>
+              <div class="gl-msg" data-gl="msg"></div>
+            </div>
+            <div class="gl-side">
+              <div class="gl-phase" data-gl="phase"></div>
+              <div class="gl-sw"><span data-gl="weight">0.0</span><small data-gl="target">/ 36 g</small></div>
+              <div class="gl-st"><span data-gl="time">0</span><small>s</small><span class="gl-gap" data-gl="flow">0.0</span><small>g/s</small></div>
+              <div class="gl-msg" data-gl="msg"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="review">
+        <header class="header">
+          <button class="back-circle" data-nav="grind"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+          <div class="header-title">Review &amp; log</div>
+        </header>
+        <div class="header-dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></div>
+        <div class="rv">
+          <div class="rv-card" data-replay="rv"></div>
+          <div class="rv-card" data-verdict="rv"></div>
+          <div class="rv-card">
+            <div class="rv-head"><div class="rv-title">How did it taste?</div><div class="rv-hint" id="rvTasteLab">Drag the dot</div></div>
+            <div data-compass="rv"></div>
+            <div class="pp-note" id="rvTasteNote"></div>
+          </div>
+          <div class="rv-card rv-next" id="rvNext">
+            <div class="rv-head"><div class="rv-title">Next brew</div><div class="rv-hint">One change at a time</div></div>
+            <div class="rv-change" id="rvChange"></div>
+            <div class="rv-nbig" id="rvAdvice"></div>
+            <div class="rv-vsub" id="rvWhy"></div>
+            <div class="rv-cmp" id="rvCmp"></div>
+            <button type="button" class="btn-primary" id="rvApply">Apply to next brew</button>
+          </div>
+          <div class="rv-card">
+            <div class="rv-head"><div class="rv-title">Log what you measured</div><div class="rv-hint">Saved with this brew</div></div>
+            <div class="rv-form">
+              <div class="rv-f"><span>Yield on scale</span><div class="rv-num"><button type="button" data-adj="rvInYield" data-by="-1">&minus;</button><input id="rvInYield" type="number" step="0.1" inputmode="decimal"><em>g</em><button type="button" data-adj="rvInYield" data-by="1">+</button></div></div>
+              <div class="rv-f"><span>Brew time</span><div class="rv-num"><button type="button" data-adj="rvInTime" data-by="-1">&minus;</button><input id="rvInTime" type="number" step="0.1" inputmode="decimal"><em>s</em><button type="button" data-adj="rvInTime" data-by="1">+</button></div></div>
+              <div class="rv-f"><span>Grinder</span><select id="rvInGrinder"></select></div>
+              <div class="rv-f"><span>Setting on grinder</span><div class="rv-num"><button type="button" data-adj="rvInClick" data-by="-1">&minus;</button><input id="rvInClick" type="number" step="1" inputmode="numeric"><em>clicks</em><button type="button" data-adj="rvInClick" data-by="1">+</button></div></div>
+              <div class="rv-f"><span>Beans</span><select id="rvInBean"><option value="broadway">Broadway</option><option value="decaf">Decaf</option><option value="other">Other</option></select></div>
+              <div class="rv-f"><span>Days since roast</span><div class="rv-num"><button type="button" data-adj="rvInRoast" data-by="-1">&minus;</button><input id="rvInRoast" type="number" step="1" inputmode="numeric"><em>days</em><button type="button" data-adj="rvInRoast" data-by="1">+</button></div></div>
+              <div class="rv-f"><span>Water temperature</span><div class="rv-num"><button type="button" data-adj="rvInTemp" data-by="-1">&minus;</button><input id="rvInTemp" type="number" step="1" inputmode="numeric"><em>°C</em><button type="button" data-adj="rvInTemp" data-by="1">+</button></div></div>
+            </div>
+            <div class="rv-fnote" id="rvMeasNote"></div>
+          </div>
+          <div class="rv-card">
+            <div class="rv-head"><div class="rv-title">Rating</div></div>
+            <div class="stars-row rv-stars" id="starsRow"></div>
+            <textarea class="rv-notes" id="reviewNotes" placeholder="Anything worth remembering about this brew"></textarea>
+          </div>
+          <div class="rv-actions">
+            <button class="btn-primary" id="shareReviewBtn"><i class="fa-solid fa-arrow-up-from-bracket icon-fa ic-bg ic-15"></i> Save &amp; share to community</button>
+            <button class="btn-secondary" id="saveReviewBtn">Save to my history</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="history">
+        <header class="header">
+          <button class="back-circle" data-nav="home"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+          <div class="header-title">Brew history</div>
+        </header>
+        <div class="rv">
+          <div class="rv-card hs-trend">
+            <div class="rv-head"><div class="rv-title">Espresso dial-in</div><div class="rv-hint" id="hsTrendHint"></div></div>
+            <div class="hs-chartwrap"><svg class="hs-chart" id="hsChart" viewBox="0 0 320 130" aria-hidden="true"></svg></div>
+            <div class="hs-legend"><span><i class="k-ok"></i>On target</span><span><i class="k-fast"></i>Fast</span><span><i class="k-long"></i>Long</span><span><i class="k-channel"></i>Channeled</span><span class="z">Band 25–32 s</span></div>
+            <div class="hs-stats" id="hsStats"></div>
+          </div>
+          <div class="hs-chips" id="hsChips"></div>
+          <div class="hs-list" id="hsList"></div>
+          <button type="button" class="btn-ghost hs-reset" id="hsReset">Reset demo data</button>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="brewdetail">
+        <header class="header">
+          <button class="back-circle" id="bdBack" data-nav="history"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+          <div class="header-title" id="bdTitle">Brew</div>
+        </header>
+        <div class="rv">
+          <div class="rv-card" data-replay="bd"></div>
+          <div class="rv-card" data-verdict="bd"></div>
+          <div class="rv-card">
+            <div class="rv-head"><div class="rv-title">Recipe</div><div class="rv-hint" id="bdWhen"></div></div>
+            <div class="bd-grid" id="bdRecipe"></div>
+          </div>
+          <div class="rv-card">
+            <div class="rv-head"><div class="rv-title">Taste</div><div class="rv-hint" id="bdTasteLab"></div></div>
+            <div data-compass="bd"></div>
+          </div>
+          <div class="rv-card">
+            <div class="rv-head"><div class="rv-title">Advice for the next brew</div></div>
+            <div class="rv-nbig" id="bdAdvice"></div>
+            <div class="rv-vsub" id="bdWhy"></div>
+          </div>
+          <div class="rv-card">
+            <div class="rv-head"><div class="rv-title">Notes</div><div class="mini-stars" id="bdStars"></div></div>
+            <div class="bd-notes" id="bdNotes"></div>
+          </div>
+          <div class="rv-actions">
+            <button type="button" class="btn-primary" id="bdApply">Try the advice</button>
+            <button type="button" class="btn-secondary" id="bdAgain">Brew again with this recipe</button>
+            <button type="button" class="btn-ghost" id="bdDelete">Delete this brew</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="shared">
+        <div class="shared-panel">
+          <div class="check-circle"><i class="fa-solid fa-check icon-fa ic-cream ic-26"></i></div>
+          <div class="shared-title">Shared to the community</div>
+          <div class="shared-message" id="sharedMessage"></div>
+          <button class="btn-secondary" data-nav="feed">View community feed</button>
+          <button class="btn-secondary" data-nav="history">Open brew history</button>
+          <button class="btn-ghost" data-nav="home">Back to home</button>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="feed">
+        <header class="header">
+          <button class="back-circle" data-nav="home"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+          <div class="header-title">Community feed</div>
+        </header>
+        <div class="feed-list" id="feedList"></div>
+      </section>
+
+      <section class="screen" data-screen="studio">
+        <div class="lv-setup">
+          <div class="lv-head">
+            <button class="back-circle" data-nav="home"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+            <div>
+              <div class="lv-kicker">Before you pour</div>
+              <div class="lv-title">What are we making?</div>
+            </div>
+          </div>
+
+          <div class="lv-pats" id="lvPatterns"></div>
+
+          <div class="lv-model-card">
+            <div class="lv-model" id="lvModel"></div>
+            <div id="lvPatternView">
+              <canvas id="lvPatternCanvas"></canvas>
+              <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,236,.4)">Top-down view</div>
+            </div>
+            <div class="lv-model-tools">
+              <button class="lv-tool" id="lvPlay" title="Play / pause"><i class="fa-solid fa-pause icon-fa ic-13"></i></button>
+              <button class="lv-tool" id="lvSpin" title="Orbit 360°"><i class="fa-solid fa-arrows-rotate icon-fa ic-13"></i></button>
+              <button class="lv-tool" id="lvPattern" title="2D pattern view"><i class="fa-solid fa-circle-dot icon-fa ic-13"></i></button>
+            </div>
+            <div class="lv-model-hint">Drag to look around</div>
+          </div>
+
+          <div class="lv-blurb" id="lvBlurb"></div>
+
+          <div class="lv-steps" id="lvSteps"></div>
+
+          <div class="lv-why">
+            <div class="lv-why-step" id="lvWhyStep">FILL</div>
+            <div class="lv-why-body" id="lvWhy"></div>
+          </div>
+
+          <div class="lv-row">
+            <div class="lv-row-top">
+              <div class="lv-row-name">Speed</div>
+              <div class="lv-row-val" id="lvSpeedText"></div>
+            </div>
+            <div class="lv-seg-group" id="lvSpeed">
+              <button class="lv-seg-btn" data-speed="0.5">0.5×</button>
+              <button class="lv-seg-btn" data-speed="0.75">0.75×</button>
+              <button class="lv-seg-btn" data-speed="1">1×</button>
+            </div>
+          </div>
+
+          <div class="lv-row">
+            <div class="lv-row-top">
+              <div class="lv-row-name">Practice</div>
+              <div class="lv-row-val">Tap to turn on or off</div>
+            </div>
+            <div class="lv-seg-group" id="lvPractice">
+              <button class="lv-seg-btn" data-opt="watch"><i class="fa-solid fa-eye"></i>Watch first</button>
+              <button class="lv-seg-btn" data-opt="stops"><i class="fa-solid fa-pause"></i>Short pauses</button>
+              <button class="lv-seg-btn" data-opt="sound"><i class="fa-solid fa-music"></i>Beat sound</button>
+            </div>
+          </div>
+
+          <div class="lv-row">
+            <div class="lv-row-top">
+              <div class="lv-row-name">Guides</div>
+              <div class="lv-row-val" id="lvGuidesText"></div>
+            </div>
+            <div class="lv-seg-group" id="lvGuides">
+              <button class="lv-seg-btn" data-g="1">1</button>
+              <button class="lv-seg-btn" data-g="2">2</button>
+              <button class="lv-seg-btn" data-g="3">3</button>
+              <button class="lv-seg-btn" data-g="4">4</button>
+              <button class="lv-seg-btn" data-g="5">5</button>
+            </div>
+          </div>
+
+          <div class="lv-row">
+            <div class="lv-row-top">
+              <div class="lv-row-name">Input</div>
+              <div class="lv-row-val" id="lvSourceText"></div>
+            </div>
+            <div class="lv-seg-group" id="lvSource">
+              <button class="lv-seg-btn" data-src="scripted">Demo</button>
+              <button class="lv-seg-btn" data-src="motion">Phone</button>
+              <button class="lv-seg-btn" data-src="wizard">Wizard</button>
+              <button class="lv-seg-btn" data-src="ble">Clip</button>
+            </div>
+          </div>
+
+          <div class="lv-cta" data-nav="getready">
+            <i class="fa-solid fa-camera icon-fa ic-cream ic-15"></i>
+            <span>Open the camera</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="getready">
+        <div class="coach-screen lv-lineup">
+          <div class="camera-layer">
+            <video id="getreadyVideo" class="camera-video hidden" autoplay playsinline muted></video>
+            <div id="getreadyFallback" class="camera-fallback">Live camera unavailable. Picture your cup here.</div>
+          </div>
+          <div class="camera-topbar">
+            <button class="back-circle glass" data-nav="studio"><i class="fa-solid fa-chevron-left icon-fa ic-cream ic-14"></i></button>
+            <div class="camera-title">Line it up</div>
+          </div>
+
+          <div class="lv-copy">
+            <div class="lv-hint" id="lvHint">Bring the pitcher into the ring</div>
+            <div class="lv-countdown hidden" id="lvCountdown">3</div>
+          </div>
+
+          <div class="lv-ring"></div>
+          <svg class="lv-pitcher-ghost" viewBox="0 0 120 104" aria-hidden="true">
+            <path d="M 24 28 L 76 28 L 79 74 C 80 108 20 108 21 74 Z" fill="#F4F1EC" />
+            <path d="M 76 28 C 90 22 107 11 107 7 C 104 3 95 8 86 18 L 76 33 Z" fill="#F4F1EC" />
+            <path d="M 24 42 C 2 42 2 62 2 62 C 2 82 24 82 24 82" fill="none" stroke="#F4F1EC" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+            <ellipse cx="50" cy="28" rx="26" ry="5.5" fill="none" stroke="#F4F1EC" stroke-width="2.5" opacity="0.65" />
+            <ellipse cx="50" cy="28" rx="22" ry="4" fill="#F4F1EC" opacity="0.3" />
+          </svg>
+
+          <div class="lv-ready-tag">Pouring a <b id="lvReadyPattern">Rosetta</b> <span id="lvReadySpeed"></span></div>
+
+          <div class="lv-checks">
+            <div class="lv-check done">
+              <div class="lv-check-dot"><i class="fa-solid fa-check icon-fa ic-12" style="color:#0D2A20"></i></div>
+              <div class="lv-check-body"><div class="lv-check-title">Cup in frame</div><div class="lv-check-desc">Rim found · 8 cm tulip cup</div></div>
+              <div class="lv-check-tag">FOUND</div>
+            </div>
+            <div class="lv-check done">
+              <div class="lv-check-dot"><i class="fa-solid fa-check icon-fa ic-12" style="color:#0D2A20"></i></div>
+              <div class="lv-check-body"><div class="lv-check-title">Wristband paired</div><div class="lv-check-desc">Two motors · 96% battery</div></div>
+              <div class="lv-check-tag">READY</div>
+            </div>
+            <div class="lv-check" id="lvChkAngle">
+              <div class="lv-check-dot"><i class="fa-solid fa-check icon-fa ic-12" style="color:#0D2A20"></i></div>
+              <div class="lv-check-body"><div class="lv-check-title">Pouring angle</div><div class="lv-check-desc">Spout over the near rim, 1 cm up</div></div>
+              <div class="lv-check-tag" id="lvChkAngleTag">TOO FAR BACK</div>
+            </div>
+            <div class="lv-check done">
+              <div class="lv-check-dot"><i class="fa-solid fa-check icon-fa ic-12" style="color:#0D2A20"></i></div>
+              <div class="lv-check-body"><div class="lv-check-title">Milk still glossy</div><div class="lv-check-desc">Poured within 40 s of steaming</div></div>
+              <div class="lv-check-tag">GOOD</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="coach">
+        <div class="ln-screen">
+          <div class="camera-layer">
+            <video id="coachVideo" class="camera-video hidden" autoplay playsinline muted></video>
+            <div id="coachFallback" class="camera-fallback"></div>
+          </div>
+
+          <svg class="ln-svg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <radialGradient id="lnCremaGrad" cx="42%" cy="34%" r="78%">
+                <stop offset="0" stop-color="#8A5A33" />
+                <stop offset="0.55" stop-color="#61361C" />
+                <stop offset="1" stop-color="#2E1809" />
+              </radialGradient>
+            </defs>
+            <g id="lnLayer"></g>
+          </svg>
+
+          <div class="ln-top">
+            <button class="back-circle glass" data-nav="studio"><i class="fa-solid fa-chevron-left icon-fa ic-cream ic-14"></i></button>
+            <div class="ln-name" id="lnName">Rosetta</div>
+            <div class="ln-mode" id="lnMode"></div>
+            <div class="ln-wrist"><i class="dot"></i><span>Wrist</span></div>
+          </div>
+          <div class="track-hint" id="lnDist"></div>
+
+          <div class="ln-scan"><span class="eo-scan-card"></span><span>Look down at the cup ring or pour mat</span></div>
+          <div class="track-off"><b>Tracking is off</b><span data-why></span><button type="button" data-skip>Show without tracking</button></div>
+
+          <div class="ln-count" id="lnCount"><b id="lnCountNum"></b><span id="lnCountSub"></span></div>
+
+          <div class="ln-next" id="lnNext" role="status" aria-live="polite">
+            <span class="ln-next-k">Next</span>
+            <b id="lnNextStep"></b>
+            <span id="lnNextWhy"></span>
+            <span class="ln-next-bar"><i></i></span>
+            <em id="lnNextIn"></em>
+          </div>
+
+          <div class="ln-word-wrap" id="lnWordWrap">
+            <div class="ln-word" id="lnWord"></div>
+            <div class="ln-hint2" id="lnHint2"></div>
+          </div>
+
+          <div class="ln-bottom">
+            <div class="ln-bottom-top">
+              <div class="ln-stepname" id="lnStepName">Fill</div>
+              <div class="ln-clock" id="lnClock">14.0s</div>
+            </div>
+            <div class="ln-phase" id="lnPhase"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="forensics">
+        <div class="fx">
+          <div class="lv-head">
+            <button class="back-circle" data-nav="studio"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+            <div>
+              <div class="lv-kicker">Just poured</div>
+              <div class="lv-title" id="fxTitle">Rosetta</div>
+            </div>
+          </div>
+
+          <div class="fx-hero">
+            <div class="fx-score" id="fxScore">0</div>
+            <div class="fx-hero-txt">
+              <div class="fx-verdict" id="fxVerdict"></div>
+              <div class="fx-hero-sub" id="fxSub">How much of the pour stayed on track</div>
+            </div>
+          </div>
+
+          <div class="fx-trace-card">
+            <svg class="fx-trace" id="fxTrace" viewBox="0 0 390 844" aria-hidden="true"></svg>
+            <div class="fx-legend">
+              <span><em style="background:rgba(244,241,236,.4)"></em>planned</span>
+              <span><em style="background:#1D9E75"></em>yours</span>
+              <span><em style="background:#E0803F"></em>off</span>
+            </div>
+          </div>
+
+          <div class="fx-bars" id="fxBars"></div>
+
+          <div class="fx-next" id="fxNext"></div>
+
+          <div class="fx-section">What to work on</div>
+          <div id="fxFaults"></div>
+
+          <div class="fx-actions">
+            <div class="fx-btn light" data-nav="studio">Change setup</div>
+            <div class="fx-btn dark" data-nav="getready">Pour again</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="beans">
+        <header class="header">
+          <button class="back-circle" data-nav="home"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+          <div class="header-title">Bean inventory</div>
+        </header>
+        <div class="scan-tile" data-nav="beanscan">
+          <div class="corner-brackets small"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div>
+          <i class="fa-solid fa-camera icon-fa ic-cream ic-24"></i>
+          <div><div class="scan-title">Scan a bag</div><div class="scan-desc">Auto-fill origin, process &amp; roast date</div></div>
+        </div>
+        <div class="bean-list" id="beanList"></div>
+      </section>
+
+      <section class="screen" data-screen="beanscan">
+        <div class="camera-screen">
+          <div class="camera-layer">
+            <video id="scanVideo" class="camera-video hidden" autoplay playsinline muted></video>
+            <div id="scanFallback" class="camera-fallback"></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="camera-topbar">
+            <button class="back-circle glass" data-nav="beans" data-stop-scan="1"><i class="fa-solid fa-chevron-left icon-fa ic-cream ic-14"></i></button>
+            <div class="camera-title">Scan bag</div>
+          </div>
+          <div class="corner-brackets scan"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div>
+          <div class="scan-prompt-wrap"><div class="scan-prompt">Point at your coffee bag</div></div>
+          <div class="scan-chips-wrap">
+            <div class="scan-chips">
+              <button class="chip glass" data-bag="broadway">Broadway</button>
+              <button class="chip glass" data-bag="decaf">Decaf</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="bagdetail">
+        <header class="header">
+          <button class="back-circle" data-nav="beanscan"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+          <div class="header-title">Match found</div>
+        </header>
+        <div class="bag-photo-placeholder" id="bagPhoto" data-nav="originstory"></div>
+        <div class="bag-head-row">
+          <div class="bag-name" id="bagName"></div>
+          <span class="tag" id="bagRoastBadge"></span>
+        </div>
+        <div class="bag-context" id="bagContext"></div>
+        <div class="muted-label dark">Tasting notes</div>
+        <div class="tag-row" id="bagNotes"></div>
+        <button class="btn-primary block" id="brewThisBagBtn">Brew this bag</button>
+      </section>
+
+      <section class="screen" data-screen="originstory">
+        <div class="origin-photo-placeholder">
+          <button class="back-circle light-back" data-nav="bagdetail"><i class="fa-solid fa-chevron-left icon-fa ic-ink ic-14"></i></button>
+        </div>
+        <div class="origin-body">
+          <div class="origin-title" id="originTitle"></div>
+          <div class="fact-card">
+            <i class="fa-solid fa-location-dot icon-fa ic-teal-dark ic-20"></i>
+            <div id="originRoastedIn"></div>
+          </div>
+          <div id="originFacts"></div>
+        </div>
+      </section>
+
+      <nav class="tabbar lg" id="tabbar" aria-label="Main">
+        <i class="tab-lens" id="tabLens"></i>
+        <button type="button" data-tab="home"><i class="fa-solid fa-house"></i><span>Home</span></button>
+        <button type="button" class="tab-ft ft-esp-t" data-feature="espresso"><i class="mi"><svg><use href="#mi-espresso"/></svg></i><span>Espresso</span></button>
+        <button type="button" class="tab-brew" id="tabBrew" aria-label="Start a brew"><i class="fa-solid fa-plus"></i></button>
+        <button type="button" class="tab-ft ft-art-t" data-feature="liveart"><i class="mi"><svg><use href="#mi-liveart"/></svg></i><span>LiveARt</span></button>
+        <button type="button" data-tab="history"><i class="fa-solid fa-chart-line"></i><span>History</span></button>
+      </nav>
+      <div class="sheet-scrim" id="sheetScrim"></div>
+      <div class="sheet lg" id="sheet" role="dialog" aria-modal="true"><i class="sheet-grab"></i><div id="sheetBody"></div></div>
+      <div class="ar" id="arRoot" aria-live="polite"></div>
+      <svg class="lg-defs" width="0" height="0" aria-hidden="true">
+        <filter id="lgRefract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="2" seed="4" result="n"/>
+          <feGaussianBlur in="n" stdDeviation="2.5" result="nb"/>
+          <feDisplacementMap in="SourceGraphic" in2="nb" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="lgRefractSoft" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="4" result="n"/>
+          <feGaussianBlur in="n" stdDeviation="3" result="nb"/>
+          <feDisplacementMap in="SourceGraphic" in2="nb" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </svg>
+    </div>
+    <div class="phone-home-indicator"></div>
+  </div>
+</div>
+<div class="gl-veil" id="glVeil"></div>
+<script src="script.js"></script>
+</body>
+</html>
